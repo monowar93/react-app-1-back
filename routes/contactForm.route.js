@@ -1,15 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const {
+  postContact,
+  getContact,
+} = require('../controllers/contact.controller');
 
-let contactData;
+router.post('/', postContact);
+router.get('/', getContact);
 
-router.post('/', (req, res) => {
-  contactData = req.body;
-  console.log(contactData);
-
-  res.send('Contact Form submitted successfully!');
-});
-router.get('/', (req, res) => {
-  res.send(contactData);
-});
 module.exports = router;
