@@ -1,42 +1,88 @@
 const path = require('path');
-let { usersAll } = require('../models/users.models');
-const { v4: uuidv4 } = require('uuid');
+let user = require('../models/users.models');
 
-//users GET
-exports.getUsers = (req, res) => {
-  res.sendFile(path.join(__dirname, '../views/users.html'));
+//users GET ALLLL........
+
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await user.find();
+    res.status(200).json(users); // Send users as JSON response
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ message: 'Server error' }); // Send error response
+  }
+};
+exports.getOneUser = async (req, res) => {
+  try {
+    const userName = req.params.name;
+    const users = await user.find({ name: userName });
+    res.status(200).json(users); // Send users as JSON response
+  } catch (error) {
+    console.error('Error finding user:', error);
+    res.status(500).json({ message: 'mongodb error' }); // Send error response
+  }
 };
 
 //users POST
-exports.postUsers = (req, res) => {
+exports.createUsers = async (req, res) => {
   const { name, age } = req.body;
-  const id = uuidv4();
-  usersAll.push({ id: uuidv4(), name: name, age: age });
-  res.send(usersAll);
-  console.log(usersAll, req.body, name, age);
+  console.log(req.body);
+  try {
+    const newUser = new user({ name: name, age: age });
+
+    await newUser.save();
+    res
+      .status(201)
+      .send(`Dear ${name}, MongoDb successfully Created your name and age`);
+  } catch (error) {
+    res.status(501).send(error.message);
+  }
 };
 
 //users PUT
+exports.updateUsers = async (req, res) => {
+  const userName = req.params.name; // Get the name from the URL parameters
+  const { name, age } = req.body; // Get new name and age from the request body
 
-exports.putUsers = (req, res) => {
-  const userId = req.params.id;
-  const { name, age } = req.body;
+  try {
+    // Find the user by name
+    const findUser = await user.findOne({ name: userName });
 
-  usersAll
-    .filter((user) => user.id === userId) // Return the user where id matches
-    .map((selectedUser) => {
-      selectedUser.name = name;
-      selectedUser.age = age;
-    });
+    // Check if user exists
+    if (!findUser) {
+      return res.status(404).send({ message: `User "${userName}" not found.` });
+    }
 
-  res.send(usersAll);
+    // Update user details
+    findUser.name = name; // Update the name
+    findUser.age = age; // Update the age
+    await findUser.save(); // Save the updated user back to the database
+
+    // Respond with the updated user
+    res.status(200).send(findUser);
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).send({ message: 'Internal server error' });
+  }
 };
 
 // user DELETE
 
-exports.deleteUsers = (req, res) => {
-  const userId = req.params.id;
-  const updateUsers = usersAll.filter((user) => user.id !== userId);
-  usersAll = updateUsers;
-  res.send(usersAll);
+exports.deleteUsers = async (req, res) => {
+  const userName = req.params.name;
+
+  try {
+    const deletedUser = await user.findOneAndDelete({ name: userName });
+
+    if (!deletedUser) {
+      return res.status(404).send({ message: `User "${userName}" not found.` });
+    }
+
+    res
+      .status(200)
+      .send({ message: `User "${userName}" deleted successfully.` });
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).send({ message: 'Internal server error' });
+  }
 };

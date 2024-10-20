@@ -1,8 +1,18 @@
-const { v4: uuidv4 } = require('uuid');
+const mongoose = require('mongoose');
 
-const usersAll = [
-  { id: uuidv4(), name: 'Tarek', age: 24 },
-  { id: uuidv4(), name: 'Mahi', age: 20 },
-];
+const usersSchema = mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  age: {
+    type: Number,
+    required: true,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
-module.exports = { usersAll };
+module.exports = mongoose.model('User', usersSchema);
