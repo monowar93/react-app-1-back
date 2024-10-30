@@ -5,6 +5,7 @@ const cors = require('cors');
 const userRouter = require('./routes/users.route');
 const registerRouter = require('./routes/register.route');
 const contactForm = require('./routes/contactForm.route');
+const registrationRoute = require('./routes/registration.route');
 const connectDB = require('./config/db');
 
 // Middleware for parsing JSON and URL-encoded data
@@ -26,6 +27,7 @@ connectDB();
 app.use('/users', userRouter);
 app.use('/register', registerRouter);
 app.use('/contact', contactForm);
+app.use('/api/registration', registrationRoute);
 
 // Home route
 app.get('/', (req, res) => {
