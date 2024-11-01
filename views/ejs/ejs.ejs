@@ -1,0 +1,22 @@
+   <!-- layout add  -->
+    <%-include("./layout/header.ejs") %>
+    
+    <main>
+        <form action="/api/ejs" method="POST">  <!--otoba http://localhost:9090/api/ejs leka jay -->
+            <input type="text" placeholder="enter prog lang" name="pLanguage">
+            <button type="submit">ADD</button>
+        </form>
+        <ul>
+           <% if(pLanguage.length > 0){ %>
+           <% for(let x=0; x < pLanguage.length;x++){ %>
+                <li><%= pLanguage[x] %></li>
+            <% } %>
+                
+           <% }else{ %>
+                <p>No data found</p>
+           <% } %>
+           
+        </ul>
+    </main>
+</body>
+</html>

@@ -6,11 +6,13 @@ const userRouter = require('./routes/users.route');
 const registerRouter = require('./routes/register.route');
 const contactForm = require('./routes/contactForm.route');
 const registrationRoute = require('./routes/registration.route');
+const ejsRoute = require('./routes/ejs.route');
 const connectDB = require('./config/db');
 
 // Middleware for parsing JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.set('view engine', 'ejs');
 
 // Enable CORS for all routes
 // const corsOptions = {
@@ -28,6 +30,7 @@ app.use('/users', userRouter);
 app.use('/register', registerRouter);
 app.use('/contact', contactForm);
 app.use('/api/registration', registrationRoute);
+app.use('/api/ejs', ejsRoute);
 
 // Home route
 app.get('/', (req, res) => {
