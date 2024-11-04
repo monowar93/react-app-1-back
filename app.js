@@ -26,9 +26,9 @@ app.use(cors());
 connectDB();
 
 // Setting up routes
+app.use('/contact', contactForm);
 app.use('/users', userRouter);
 app.use('/register', registerRouter);
-app.use('/contact', contactForm);
 app.use('/api/registration', registrationRoute);
 app.use('/api/ejs', ejsRoute);
 

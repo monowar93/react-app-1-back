@@ -6,7 +6,7 @@ const {
   getContact,
 } = require('../controllers/contact.controller');
 
-router.use(express.static(path.join(__dirname, '../views/form.css')));
+// router.use(express.static(path.join(__dirname, '../views/form.css')));
 
 router.post('/', postContact);
 router.get('/', getContact);

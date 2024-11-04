@@ -64,5 +64,5 @@ TAREK MONOWAR `,
 
 // Get CONTACT
 exports.getContact = (req, res) => {
-  res.send(contactData);
+  res.send('comtact get route');
 };
