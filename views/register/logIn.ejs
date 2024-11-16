@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/registerNav.css">
+    <link rel="stylesheet" href="/css/login.css">
+    
+</head>
+<body>
+    
+
+    <header>
+        <nav>
+            <a href="/register" class="<%= (typeof activeRoute !== 'undefined' && activeRoute === 'home') ? 'active' : '' %>">Home</a>
+            <a href="/register/signin" class="<%= (typeof activeRoute !== 'undefined' && activeRoute === 'signin') ? 'active' : '' %>">Sign-In</a>
+            <a href="/register/login" class="<%= (typeof activeRoute !== 'undefined' && activeRoute === 'login') ? 'active' : '' %>">Log-In</a>
+            <a href="/register/profile" class="<%= (typeof activeRoute !== 'undefined' && activeRoute === 'profile') ? 'active' : '' %>">Profile</a>
+            <a href="/register/logout" class="<%= (typeof activeRoute !== 'undefined' && activeRoute === 'logout') ? 'active' : '' %>">Log-Out</a>
+        </nav>
+    </header>
+    
+    <main>
+        <% if (message) { %>
+            <div class="alert success">
+                <%= message %>
+            </div>
+        <% } %>
+
+        <form action="/register/login" method="POST">
+            <div class="input-box">
+                <label for="email">Email/User-name :</label>
+                <input type="email" name="email" id="email" required>
+            </div>
+            <div class="input-box">
+                <label for="password">Password :</label>
+                <input type="password" name="password" id="password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </main>
+<%- include("./layout/footer.ejs") %>

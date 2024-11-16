@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/registerNav.css">
+</head>
+<body>
+    
+
+    <header>
+        <nav>
+            <a href="/register" class="<%= (typeof activeRoute !== 'undefined' && activeRoute === 'home') ? 'active' : '' %>">Home</a>
+            <a href="/register/signin" class="<%= (typeof activeRoute !== 'undefined' && activeRoute === 'signin') ? 'active' : '' %>">Sign-In</a>
+            <a href="/register/login" class="<%= (typeof activeRoute !== 'undefined' && activeRoute === 'login') ? 'active' : '' %>">Log-In</a>
+            <a href="/register/profile" class="<%= (typeof activeRoute !== 'undefined' && activeRoute === 'profile') ? 'active' : '' %>">Profile</a>
+            <a href="/register/logout" class="<%= (typeof activeRoute !== 'undefined' && activeRoute === 'logout') ? 'active' : '' %>">Log-Out</a>
+        </nav>
+    </header>
+    
+    
+
+<main><h1>this is hoem register in page</h1></main>
+<%- include("./layout/footer.ejs") %>

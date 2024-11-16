@@ -9,7 +9,7 @@ const {
   deleteUsers,
 } = require('../controllers/users.controller');
 
-router.use(express.static(path.join(__dirname, '../views')));
+// router.use(express.static(path.join(__dirname, '../views')));
 
 router.get('/', getAllUsers);
 router.get('/:name', getOneUser);

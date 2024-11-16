@@ -1,0 +1,77 @@
+/* Style for the main container */
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+}
+
+/* Style for the success alert message */
+.alert.success {
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 50px;
+    margin-bottom: 15px;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Style for form container */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Style for input fields */
+.input-box {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.input-box label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.input-box input:focus {
+    border-color: #4caf50;
+    outline: none;
+}
+
+/* Style for the submit button */
+button {
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 200px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}

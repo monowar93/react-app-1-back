@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/signIn.css">
+    <link rel="stylesheet" href="/css/registerNav.css">
+</head>
+<body>
+    
+
+    <header>
+        <nav>
+            <a href="/register" class="<%= (typeof activeRoute !== 'undefined' && activeRoute === 'home') ? 'active' : '' %>">Home</a>
+            <a href="/register/signin" class="<%= (typeof activeRoute !== 'undefined' && activeRoute === 'signin') ? 'active' : '' %>">Sign-In</a>
+            <a href="/register/login" class="<%= (typeof activeRoute !== 'undefined' && activeRoute === 'login') ? 'active' : '' %>">Log-In</a>
+            <a href="/register/profile" class="<%= (typeof activeRoute !== 'undefined' && activeRoute === 'profile') ? 'active' : '' %>">Profile</a>
+            <a href="/register/logout" class="<%= (typeof activeRoute !== 'undefined' && activeRoute === 'logout') ? 'active' : '' %>">Log-Out</a>
+        </nav>
+    </header>    
+
+<main>
+    <div class="container">
+        <!-- Title section -->
+        <div class="title">Registration</div>
+        <div class="content">
+            <!-- Registration form -->
+            <form action="/register" method="POST">
+
+                <div class="user-details">
+                    <!-- Input for Full Name -->
+                    <div class="input-box">
+                        <span class="details">Full Name</span>
+                        <input type="text" name="fullName" placeholder="Enter your name" required>
+                    </div>
+                    <!-- Input for Username -->
+                    <div class="input-box">
+                        <span class="details">Username</span>
+                        <input type="text" name="userName" placeholder="Enter your username" required>
+                    </div>
+                    
+                    <!-- Input for Email -->
+                    <div class="input-box">
+                        <span class="details">Email</span>
+                        <input type="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    <!-- Input for Phone Number -->
+                    <div class="input-box">
+                        <span class="details">Phone Number</span>
+                        <input type="tel" name="phoneNumber" placeholder="Enter your number" required>
+                    </div>
+                    <!-- Input for Password -->
+                    <div class="input-box">
+                        <span class="details">Password</span>
+                        <input type="password" name="password" id="password" placeholder="Enter your password" required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Confirm Password</span>
+                        <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm your password" required>
+                        <div id="passwordMatchMessage" class="match-message"></div>
+                    </div>
+                    
+                </div>
+
+                <div class="gender-details">
+                    <!-- Radio buttons for gender selection -->
+                    <input type="radio" name="gender" id="dot-1" value="Male" required>
+                    <input type="radio" name="gender" id="dot-2" value="Female" required>
+                    <input type="radio" name="gender" id="dot-3" value="not say" required>
+                    <span class="gender-title">Gender</span>
+                    <div class="category">
+                        <!-- Label for Male -->
+                        <label for="dot-1">
+                            <span class="dot one"></span>
+                            <span class="gender">Male</span>
+                        </label>
+                        <!-- Label for Female -->
+                        <label for="dot-2">
+                            <span class="dot two"></span>
+                            <span class="gender">Female</span>
+                        </label>
+                        <!-- Label for Prefer not to say -->
+                        <label for="dot-3">
+                            <span class="dot three"></span>
+                            <span class="gender">Prefer not to say</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Submit button -->
+                <div class="button">
+                    <input type="submit">
+                </div>
+                <% if (message) { %>
+                    <div class="alertSuccess">
+                        <%= message %>
+                    </div>
+                <% } %>
+            </form>
+        </div>
+    </div>
+</main>
+
+<%- include("./layout/footer.ejs") %>
+
+
+
+<script>
+
+    //   <!-- this is for front and password==confirm password match -->
+
+
+    document.getElementById('confirmPassword').addEventListener('input', function() {
+        const password = document.getElementById('password').value;
+        const confirmPassword = this.value;
+        const messageDiv = document.getElementById('passwordMatchMessage');
+        
+        if (password === confirmPassword) {
+            messageDiv.textContent = 'Passwords match';
+            messageDiv.classList.remove('no-match');
+            messageDiv.classList.add('match');
+        } else {
+            messageDiv.textContent = 'Passwords do not match !';
+            messageDiv.classList.remove('match');
+            messageDiv.classList.add('no-match');
+        }
+    });
+
+ </script>
+
+
+
+
+
+
+

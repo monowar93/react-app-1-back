@@ -13,13 +13,7 @@ const connectDB = require('./config/db');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
-
-// Enable CORS for all routes
-// const corsOptions = {
-//   origin: 'http://localhost:3000', // Frontend URL (React app)
-//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//   allowedHeaders: ['Content-Type'],
-// };
+app.use(express.static(path.join(__dirname, './public')));
 app.use(cors());
 
 // Connect to MongoDB
@@ -27,10 +21,10 @@ connectDB();
 
 // Setting up routes
 app.use('/contact', contactForm);
-app.use('/users', userRouter);
-app.use('/register', registerRouter);
 app.use('/api/registration', registrationRoute);
+app.use('/users', userRouter);
 app.use('/api/ejs', ejsRoute);
+app.use('/register', registerRouter);
 
 // Home route
 app.get('/', (req, res) => {
