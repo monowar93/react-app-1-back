@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success</title>
+</head>
+<body>
+
+    <h1>Payment Successful!</h1>
+    <h2>Name: <strong><%= paymentDetails.name %></strong></h2>
+    <p>Email: <strong><%= paymentDetails.email %></strong></p>
+    <p>Payment Time: <strong><%= paymentDetails.time %></strong></p>
+    <p>Transaction ID: <strong><%= paymentDetails.transactionId %></strong></p>
+    <p>Amount: <strong>$<%= paymentDetails.amount %></strong></p>
+    <p>Currency: <strong><%= paymentDetails.currency.toUpperCase() %></strong></p>
+    <p>Item Purchased: <strong><%= paymentDetails.itemName %></strong></p>
+    
+
+
+    <!-- "Go Home" button -->
+  <button id="goHomeButton">Go Home</button>
+
+  <script>
+    // Redirect to the home route (/payments) when the button is clicked
+    document.getElementById("goHomeButton").addEventListener("click", () => {
+      window.location.href = "/payments";
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stripe Payment Demo</title>
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <h3>Welcome to Payment Gateway</h3>
+  <button id="payButton">Pay with Card</button>
+  <button id="payWithPayPal">Pay with PayPal</button>
+  <button id="payWithBkash">Pay with bKash</button>
+
+  <div id="payment-status"></div>
+  
+  <script>
+    const stripe = Stripe("<%=key%>"); // Replace with your actual key
+
+    document.getElementById("payButton").addEventListener("click", async () => {
+      try {
+        const price=500;
+        const items='t-shirt';
+
+        const paymentStatus = document.getElementById("payment-status");
+        paymentStatus.textContent = "Creating checkout session...";
+
+        const response = await fetch("/payments/create-checkout-session", { method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({items:items, price: price })
+         });
+
+        if (!response.ok) {
+          paymentStatus.textContent = "Failed to create checkout session. Please try again.";
+          throw new Error("Failed to create checkout session.");
+        }
+
+        const session = await response.json();
+
+        const { error } = await stripe.redirectToCheckout({ sessionId: session.id });
+        if (error) {
+          paymentStatus.textContent = "Error processing payment. Please try again.";
+          console.error("Stripe Checkout error:", error);
+        }
+      } catch (err) {
+        paymentStatus.textContent = "An error occurred. Please try again.";
+        console.error("Error fetching Checkout Session:", err);
+      }
+    });
+  </script>
+</body>
+</html>
