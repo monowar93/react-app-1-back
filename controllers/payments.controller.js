@@ -32,8 +32,8 @@ exports.postPayments= async (req, res) => {
         ],
         metadata: {name,email, items },
         mode: "payment",
-        success_url: "http://localhost:9091/payments/success?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url: "http://localhost:9091/payments/cancel",
+        success_url: "https://tmdevo.onrender.com/payments/success?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url: "https://tmdevo.onrender.com/payments/cancel",
       });
   
       res.json({ id: session.id }); // Return the session ID to the client
