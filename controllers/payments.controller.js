@@ -14,7 +14,7 @@ exports.getPayments= (req, res) => {
 
 exports.postPayments= async (req, res) => {
     try {
-      const {price,items,name,email} = req.body;
+      const {price,items} = req.body;
       const amount=(price*100);
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
@@ -30,7 +30,7 @@ exports.postPayments= async (req, res) => {
             quantity: 1,
           },
         ],
-        metadata: {name,email, items },
+        metadata: {items },
         mode: "payment",
         success_url: "https://tmdevo.onrender.com/payments/success?session_id={CHECKOUT_SESSION_ID}",
         cancel_url: "https://tmdevo.onrender.com/payments/cancel",

@@ -1,48 +1,178 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Stripe Payment Demo</title>
-  <script src="https://js.stripe.com/v3/"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Gateway</title>
+  <link rel="stylesheet" href="/css/payments.css">
 </head>
 <body>
-  <h3>Welcome to Payment Gateway</h3>
-  <button id="payButton">Pay with Card</button>
-  <button id="payWithPayPal">Pay with PayPal</button>
-  <button id="payWithBkash">Pay with bKash</button>
+  <div class="main">
+      <!-- Card Section -->
+             <div class="card-section">
+                    <!-- VISA -->
+                    <div class="card-section-1">
+                            <div class="visa">
+                            <img src="images/visa-card.png" alt="VISA" style="height: 1.5rem;">
+                            </div>
+                            <p style="font-weight: bold; color: #2d3748;">**** **** **** 1060</p>
+                            <div class="visa-1">
+                              <p><span style="font-weight: 600;">Expiry:</span> 10/30</p>
+                              <p><span style="font-weight: 600;">Name:</span> MT Monowar</p>
+                            </div>
+                     </div>
+                    <!-- MasterCard -->
+                    <div class="card-section-1">
+                            <div class="visa">
+                            <img src="images/master-card.png" alt="MasterCard" style="height: 1.5rem;">
+                            </div>
+                             <p style="font-weight: bold; color: #2d3748;">**** **** **** 1060</p>
+                            <div class="visa-1">
+                             <p><span style="font-weight: 600;">Expiry:</span> 10/30</p>
+                             <p><span style="font-weight: 600;">Name:</span> MT Monowar</p>
+                            </div>
+                     </div>
+                  
+                    <!-- PayPal -->
+                    <div class="card-section-1" >
+                            <div class="visa">
+                            <img src="images/paypal-card.png" alt="Paypal" style="height: 1.5rem;">
+                            </div>
+                            <p style="font-weight: bold; color: #2d3748;">**** **** **** 1060</p>
+                            <div class="visa-1">
+                            <p><span style="font-weight: 600;">Expiry:</span> 10/30</p>
+                            <p><span style="font-weight: 600;">Name:</span> MT Monowar</p>
+                           </div>
+                   </div>    
+            </div>
 
-  <div id="payment-status"></div>
-  
+
+
+             <!-- Payment Methods -->
+            <div class="payments">
+                    <!-- Left Section -->
+                  <div class="left">
+                      <h2 style="margin-bottom: 0.5rem; margin-top: 0.75rem;"><strong>Items :</strong></h2>
+                      <p style="margin-bottom: 1rem;">tshirt, jeans, football</p>
+                      <h3 style="margin-top: auto; margin-bottom: 1rem;"><strong>Total amounts :</strong> 600$</h3>
+                  </div>
+                  
+
+                    <!-- Right Section -->
+                  <div class="right">
+                      <div class="payment-option" style="margin-bottom: 1rem;">
+                          <label>
+                            <input type="radio" name="paymentMethod" value="card" style="margin-right: 0.5rem;">
+                            <img src="images/card.png" alt="Card Icon" style="height: 1rem; margin-right: 0.5rem;">
+                            <span>Card</span>
+                          </label>                      
+
+                          <label>
+                            <input type="radio" name="paymentMethod" value="paypal" style="margin-right: 0.5rem;">
+                            <img src="images/paypal.png" alt="PayPal Icon" style="height: 1rem; margin-right: 0.5rem;">
+                            <span>PayPal</span>
+                          </label>
+                    
+
+                          <label>
+                            <input type="radio" name="paymentMethod" value="bkash" style="margin-right: 0.5rem;">
+                            <img src="images/bkash.png" alt="Bkash Icon" style="height: 1rem; margin-right: 0.5rem;">
+                            <span>Bkash</span>
+                          </label>
+                  
+
+                          <label>
+                            <input type="radio" name="paymentMethod" value="wise" style="margin-right: 0.5rem;">
+                            <img src="images/wise.png" alt="Wise Icon" style="height: 1rem; margin-right: 0.5rem;">
+                            <span>Wise</span>
+                          </label>
+                        </div>
+
+                        <div style="font-size: 0.75rem; color: #4B5563; margin-top: 0.5rem;">
+                               After submission, you will be redirected to securely complete the next steps.
+                        </div>
+                   </div>
+                   
+            </div>
+
+            <!-- Payment Button (Inside the Box) -->
+            <div>
+              <button id="payButton" class="pay-button">
+                Make Payment
+              </button>
+              <div id="payment-status"></div>
+            </div>
+            
+  </div>
+
+  <script src="https://js.stripe.com/v3/"></script>
   <script>
     const stripe = Stripe("<%=key%>"); // Replace with your actual key
+    const payButton = document.getElementById("payButton");
+    const paymentStatus = document.getElementById("payment-status");
 
-    document.getElementById("payButton").addEventListener("click", async () => {
-      try {
-        const price=500;
-        const items='t-shirt';
+    payButton.addEventListener("click", async () => {
+      const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+      if (!selectedPaymentMethod) {
+        paymentStatus.textContent = "Please select a payment method.";
+        return;
+      }
 
-        const paymentStatus = document.getElementById("payment-status");
-        paymentStatus.textContent = "Creating checkout session...";
+      const method = selectedPaymentMethod.value;
 
-        const response = await fetch("/payments/create-checkout-session", { method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({items:items, price: price })
-         });
+      if (method === "card") {
+        try {
+          paymentStatus.textContent = "Processing payment with card...";
 
-        if (!response.ok) {
-          paymentStatus.textContent = "Failed to create checkout session. Please try again.";
-          throw new Error("Failed to create checkout session.");
+          const details = { items: "t-shirt", price: 500, method: method };
+
+          const response = await fetch("/payments/create-checkout-session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(details)
+          });
+
+          if (!response.ok) {
+            paymentStatus.textContent = "Failed to create checkout session. Please try again.";
+            throw new Error("Failed to create checkout session.");
+          }
+
+          const session = await response.json();
+
+          const { error } = await stripe.redirectToCheckout({ sessionId: session.id });
+          if (error) {
+            paymentStatus.textContent = "Error processing payment. Please try again.";
+            console.error("Stripe Checkout error:", error);
+          }
+        } catch (err) {
+          paymentStatus.textContent = "An error occurred. Please try again.";
+          console.error("Error fetching Checkout Session:", err);
         }
+      } else if (method === "paypal") {
+        try {
+          paymentStatus.textContent = "Processing payment with PayPal...";
+          // Example logic for PayPal (replace with actual implementation)
+          const details = { items: "t-shirt", price: 500, method: method };
 
-        const session = await response.json();
+          const response = await fetch("/payments/paypal-session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(details)
+          });
 
-        const { error } = await stripe.redirectToCheckout({ sessionId: session.id });
-        if (error) {
-          paymentStatus.textContent = "Error processing payment. Please try again.";
-          console.error("Stripe Checkout error:", error);
+          if (!response.ok) {
+            paymentStatus.textContent = "Failed to create PayPal session. Please try again.";
+            throw new Error("Failed to create PayPal session.");
+          }
+
+          const session = await response.json();
+          window.location.href = session.redirectUrl;
+        } catch (err) {
+          paymentStatus.textContent = "An error occurred. Please try again.";
+          console.error("Error fetching PayPal Session:", err);
         }
-      } catch (err) {
-        paymentStatus.textContent = "An error occurred. Please try again.";
-        console.error("Error fetching Checkout Session:", err);
+      } else {
+        paymentStatus.textContent = `Payment method ${method} is not implemented yet.`;
       }
     });
   </script>
