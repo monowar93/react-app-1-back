@@ -14,23 +14,29 @@ exports.getPayments= (req, res) => {
 
 exports.postPayments= async (req, res) => {
     try {
-      const {price,items} = req.body;
-      const amount=(price*100);
+      const {price,items,quantity} = req.body;
+      // const amount=(price*100);
+      const cartItems = [
+        { name: items, price: price, quantity: quantity }, // $50.00 x 2
+        { name: "books", price: 3000, quantity: 7 }, // $30.00 x 1
+        { name: "jumper", price: 3000, quantity: 4 }, // $30.00 x 1
+        { name: "phone", price: 2600, quantity: 2 }, // $30.00 x 1
+        { name: "laptop", price: 3600, quantity: 6 }, // $30.00 x 1
+      ];
+      
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
-        line_items: [
-          {
-            price_data: {
-              currency: "usd",
-              product_data: {
-                name:items,
-              },
-              unit_amount:amount, // Amount in cents (7000 = $70.00)
+        line_items: cartItems.map(item => ({
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: item.name,
             },
-            quantity: 1,
+            unit_amount: item.price * 100, // Convert to cents
           },
-        ],
-        metadata: {items },
+          quantity: item.quantity,
+        })),
+        metadata: { cartItems: JSON.stringify(cartItems) },
         mode: "payment",
         success_url: "https://tmdevo.onrender.com/payments/success?session_id={CHECKOUT_SESSION_ID}",
         cancel_url: "https://tmdevo.onrender.com/payments/cancel",
@@ -61,6 +67,19 @@ exports.postPayments= async (req, res) => {
   
       // Extract customer details
       const customerDetails = session.customer_details;
+
+      // Parse cart items from metadata
+    let cartItems = [];
+    if (session.metadata?.cartItems) {
+      try {
+        cartItems = JSON.parse(session.metadata.cartItems); // Parse JSON string to array
+      } catch (error) {
+        console.error("Error parsing cart items:", error);
+      }
+    }
+
+    // Extract product names (or other details) for rendering
+    const productNames = cartItems.map(item => `${item.name} (x${item.quantity})`).join(", ");
   
       const paymentDetails = {
         transactionId: paymentIntent.id,
@@ -68,8 +87,11 @@ exports.postPayments= async (req, res) => {
         currency: paymentIntent.currency,
         name: customerDetails.name || "N/A", // Customer's name
         email: customerDetails.email || "N/A", // Customer's email
-        time: new Date(paymentIntent.created * 1000).toLocaleString(), // Payment time
-        itemName: session.metadata?.items || "N/A", // Optional metadata
+        time: new Date(paymentIntent.created * 1000).toLocaleString(),
+        sellerName: "Tarek Monowar", 
+        sellerEmail:"tarekmonowar2332@gmail.com",
+        itemName:  productNames || "N/A",
+        cartItems,  // Optional metadata
       };
   
       // Render the success page with payment details

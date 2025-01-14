@@ -9,6 +9,7 @@ body {
 
 .main {
   width: 40%;
+  max-height:490px;
   height: 65%; 
   background-color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -114,4 +115,59 @@ label span{
   color: #B91C1C;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
+}
+
+
+
+
+@media (max-width: 750px) {
+  /* Main container */
+  .main {
+    width: 95%;
+    height: 100%;
+  }
+
+  /* Card Section */
+  .card-section {
+    grid-template-columns: repeat(3, 1fr);
+
+  }
+
+  /* Card section item */
+  .card-section-1 {
+    font-size: 5px;
+    width:100px; /* Adjust font size for smaller screens */
+    padding: 3px; /* Adjust padding for smaller screens */
+  }
+
+  /* Payment options section */
+  .payments {
+    flex-direction: column; /* Stack payment options vertically */
+    gap: 5px;
+    padding:5px; /* Space between payment options */
+  }
+
+  /* Right section */
+  .right {
+    width: 100%;
+    padding:5px; /* Take full width */
+    max-width: none; /* Remove max width restriction */
+    margin-top: 2px; /* Add some margin for spacing */
+  }
+
+  /* Label styling */
+  label {
+    font-size: 10px; /* Adjust label font size for better readability */
+  }
+
+  /* Payment button */
+  .pay-button {
+    font-size: 1rem; /* Increase button font size for easier clicking */
+    padding: 8px; /* Increase padding for touch screens */
+  }
+
+  /* Payment status text */
+  #payment-status {
+    font-size: 0.875rem; /* Adjust text size for status message */
+  }
 }

@@ -1,30 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Success</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Success</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0 auto;
+      padding: 20px;
+      max-width: 600px;
+    }
+    h1 {
+      color: green;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+
+    table td {
+  word-wrap: break-word;
+  max-width: 150px; /* Adjust as needed */
+}
+
+    table th {
+      background-color: #f4f4f4;
+    }
+    
+    .seller{
+      color:gray;
+      text-align: center;
+      font-style: italic;
+      font-size: 8px;
+    }
+    
+    
+    button {
+      display: inline-block;
+      margin: 10px 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      color: #fff;
+      background-color: #007BFF;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .button-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    /* Print styling */
+    @media print {
+      button, #goHomeButton {
+        display: none; /* Hide buttons in print view */
+      }
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      table {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <h1>Payment Successful!</h1>
-    <h2>Name: <strong><%= paymentDetails.name %></strong></h2>
-    <p>Email: <strong><%= paymentDetails.email %></strong></p>
-    <p>Payment Time: <strong><%= paymentDetails.time %></strong></p>
-    <p>Transaction ID: <strong><%= paymentDetails.transactionId %></strong></p>
-    <p>Amount: <strong>$<%= paymentDetails.amount %></strong></p>
-    <p>Currency: <strong><%= paymentDetails.currency.toUpperCase() %></strong></p>
-    <p>Item Purchased: <strong><%= paymentDetails.itemName %></strong></p>
-    
+  <h1>Payment Successful!</h1>
+  <h2>Name: <strong><%= paymentDetails.name %></strong></h2>
+  <p>Email: <strong><%= paymentDetails.email %></strong></p>
+  <p>Payment Time: <strong><%= paymentDetails.time %></strong></p>
+  <p>Transaction ID: <strong><%= paymentDetails.transactionId %></strong></p>
+  <p>Amount: <strong>$<%= paymentDetails.amount %></strong></p>
+  <p>Currency: <strong><%= paymentDetails.currency.toUpperCase() %></strong></p>
 
-
-    <!-- "Go Home" button -->
-  <button id="goHomeButton">Go Home</button>
+  <!-- Display a list of purchased items -->
+  <h3>Items Purchased:</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Product Name</th>
+        <th>Price (USD)</th>
+        <th>Quantity</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% let totalAmount = 0; %>
+      <% paymentDetails.cartItems.forEach(item => { 
+        let itemTotal = item.price * item.quantity;
+        totalAmount += itemTotal; %>
+        <tr>
+          <td><%= item.name %></td>
+          <td>$<%= (item.price).toFixed(2) %></td>
+          <td><%= item.quantity %></td>
+          <td>$<%= itemTotal.toFixed(2) %></td>
+        </tr>
+      <% }); %>
+      <!-- Add the Total row at the end -->
+      <tr>
+        <td colspan="3" style="text-align: right; font-weight: bold;">Total:</td>
+        <td>$<%= totalAmount.toFixed(2) %></td>
+      </tr>
+    </tbody>
+  </table>
+   <div class="seller">
+    <h2>Recieved By : <%= paymentDetails.sellerName %></h2>
+    <h2>Please contact : <%= paymentDetails.sellerEmail %></h2>
+   </div>
+  <!-- "Go Home" button -->
+  <div class="button-container">
+    <button id="goHomeButton">Go Home</button>
+    <button id="printButton">Print Receipt</button>
+  </div>
 
   <script>
-    // Redirect to the home route (/payments) when the button is clicked
+    // Redirect to the home route when the button is clicked
     document.getElementById("goHomeButton").addEventListener("click", () => {
       window.location.href = "https://tmdevo.vercel.app/";
+    });
+
+    // Trigger print dialog when the print button is clicked
+    document.getElementById("printButton").addEventListener("click", () => {
+      window.print();
     });
   </script>
 </body>
